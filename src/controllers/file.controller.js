@@ -42,3 +42,14 @@ fileController.get('', (req, res) => {
     res.status(200).json({ filesList });
   });
 });
+
+fileController.get('/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const uploadsFolderPath = __basedir + uploadsFolder;
+
+  res.download(uploadsFolderPath + filename, filename, (err) => {
+    if (err) {
+      return res.status(400).json({ error: 'Error occurred while downloading file.' + err });
+    }
+  });
+});
