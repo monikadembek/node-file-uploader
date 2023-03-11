@@ -1,6 +1,7 @@
 import Router from 'express';
 import { uploadSingleFile } from '../middlewares/upload.js';
 import * as fs from 'node:fs';
+import { unlink } from 'node:fs';
 
 export const fileController = new Router();
 const uploadsFolder = "/resources/static/assets/uploads/";
@@ -51,5 +52,17 @@ fileController.get('/:filename', (req, res) => {
     if (err) {
       return res.status(400).json({ error: 'Error occurred while downloading file.' + err });
     }
+  });
+});
+
+fileController.delete('/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const uploadsFolderPath = __basedir + uploadsFolder;
+
+  unlink(uploadsFolderPath + filename, (err) => {
+    if (err) {
+      return res.status(400).json({ error: 'Deleting file failed.' + err });
+    }
+    res.status(200).json({ message: 'File was deleted' });
   });
 });
