@@ -1,6 +1,6 @@
 import express from 'express';
 import { router } from './router.js';
-import path from 'path';
+import path from 'node:path';
 import { fileURLToPath } from 'url';
 import * as dotenv from 'dotenv';
 
@@ -10,8 +10,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename).replace('\src', '');
-global.__basedir = __dirname;
+const __dirname = path.dirname(__filename); 
+global.__basedir = path.join(__dirname, '..');
 
 app.use(express.json());
 app.use(router);

@@ -2,6 +2,7 @@ import Router from 'express';
 import { uploadSingleFile } from '../middlewares/upload.js';
 import * as fs from 'node:fs';
 import { unlink } from 'node:fs';
+import path from 'node:path';
 
 export const fileController = new Router();
 const uploadsFolder = "/resources/static/assets/uploads/";
@@ -25,7 +26,7 @@ fileController.post('/upload', async (req, res) => {
 });
 
 fileController.get('', (req, res) => {
-  const uploadsFolderPath = __basedir + uploadsFolder;
+  const uploadsFolderPath = path.join(__basedir, uploadsFolder);
   const filesList = [];
 
   fs.readdir(uploadsFolderPath, (err, files) => {
@@ -46,7 +47,7 @@ fileController.get('', (req, res) => {
 
 fileController.get('/:filename', (req, res) => {
   const filename = req.params.filename;
-  const uploadsFolderPath = __basedir + uploadsFolder;
+  const uploadsFolderPath = path.join(__basedir, uploadsFolder);
 
   res.download(uploadsFolderPath + filename, filename, (err) => {
     if (err) {
@@ -57,7 +58,7 @@ fileController.get('/:filename', (req, res) => {
 
 fileController.delete('/:filename', (req, res) => {
   const filename = req.params.filename;
-  const uploadsFolderPath = __basedir + uploadsFolder;
+  const uploadsFolderPath = path.join(__basedir, uploadsFolder);
 
   unlink(uploadsFolderPath + filename, (err) => {
     if (err) {
