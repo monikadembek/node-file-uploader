@@ -5,7 +5,7 @@ import path from 'node:path';
 const maxSize = 2 * 1024 * 1024;
 const uploadFolder = "/resources/static/assets/uploads/";
 
-const storage = multer.diskStorage({ 
+const diskStorage = multer.diskStorage({ 
   destination: function(req, file, cb) {
     cb(null, path.join(__basedir, uploadFolder));
   },
@@ -16,9 +16,16 @@ const storage = multer.diskStorage({
 });
 
 const uploadFile = multer({
-  storage: storage,
+  storage: diskStorage,
   limits: { fileSize: maxSize }
 }).single("file");
 
 export const uploadSingleFile = util.promisify(uploadFile);
+
+const storeFileInMemory = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: maxSize }
+}).single("file");
+
+export const storeSingleFileInMemory = util.promisify(storeFileInMemory);
 
