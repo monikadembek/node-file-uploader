@@ -29,3 +29,6 @@ Content-Type: image/jpg
 < ./cat-laptop-banner.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
+### GET list of files uploaded to google cloud storage 
+GET http://localhost:3000/gcs/files
+
