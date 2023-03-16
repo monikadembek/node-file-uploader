@@ -10,7 +10,6 @@ const bucket = storage.bucket(bucketName);
 
 gcsFileController.post('/upload', async (req, res) => {
   const options = {
-    public: true,
     resumable: false
   };
 
@@ -29,8 +28,18 @@ gcsFileController.post('/upload', async (req, res) => {
         console.log('onerror: ', err);
         res.status(500).json({ error: `Couldn\'t upload the file. ${err} ` });    
       })
-      .on('finish', () => {
+      .on('finish', async () => {
         const url = `https://storage.googleapis.com/${bucketName}/${file.originalname}`;
+
+        await fileBlob.makePublic()
+          .catch(err => {
+            console.log('Error when making file public', err);
+            return res.status(200).json({ 
+              message: `File ${file.originalname} uploaded to ${bucketName}, but it couldn't be made public.`,
+              fileUrl: url
+            }); 
+          });
+        
         res.status(200).json({ 
           message: `File ${file.originalname} uploaded to ${bucketName}`,
           fileUrl: url
