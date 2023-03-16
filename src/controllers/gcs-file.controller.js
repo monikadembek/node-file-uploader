@@ -70,3 +70,16 @@ gcsFileController.get('', async (req, res) => {
 
   res.status(200).json({ files: filesList });
 });
+
+gcsFileController.get('/:filename', async (req, res) => {
+  const filename = req.params.filename;
+  const file = bucket.file(filename);
+  
+  const [metadata] = await file.getMetadata()
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: 'Downloading file failed. ' + err })
+    });
+  console.log('metadata: ', metadata);
+  res.redirect(metadata.mediaLink);
+});

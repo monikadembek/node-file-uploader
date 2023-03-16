@@ -32,3 +32,5 @@ Content-Type: image/jpg
 ### GET list of files uploaded to google cloud storage 
 GET http://localhost:3000/gcs/files
 
+### GET file uploaded to google cloud storage 
+GET http://localhost:3000/gcs/files/cat-laptop-banner.jpg
